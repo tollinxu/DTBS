@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">DTBS</string>
+    <string name="navigation_drawer_open">open</string>
+    <string name="navigation_drawer_close">close</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="driveNOLabel">Drive Licence</string>
+    <string name="dateLabel">Choose Date</string>
+    <string name="timeLabel">Time Slot</string>
+    <string name="driveLicenceHint">*********</string>
+    <string name="dateHint">Select Date</string>
+    <string name="btnSubmit">Submit</string>
+</resources>
