@@ -9,6 +9,16 @@
     </style>
     <style name="generalnotitle" parent="Theme.AppCompat">
         <item name="android:windowNoTitle">true</item>
+
+    </style>
+    <style name="GreenProgressBarStyle" parent="@android:style/Widget.ProgressBar.Horizontal">
+        <item name="colorAccent">@color/green</item>
+    </style>
+    <style name="RedProgressBarStyle">
+        <item name="colorAccent">@color/red</item>
+    </style>
+    <style name="YellowProgressBarStyle">
+        <item name="colorAccent">@color/yellow</item>
     </style>
 
 </resources>

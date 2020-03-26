@@ -12,9 +12,12 @@ import android.view.Window;
 import android.widget.Toast;
 
 import com.felix.dtbs.fragments.BookSlotFragment;
+import com.felix.dtbs.fragments.DaySlotFragment;
+import com.felix.dtbs.fragments.DriverSlotFragment;
 import com.felix.dtbs.fragments.HomeFragment;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import nl.psdcompany.duonavigationdrawer.views.DuoDrawerLayout;
@@ -24,19 +27,14 @@ import nl.psdcompany.duonavigationdrawer.views.DuoOptionView;
 public class MainActivity extends AppCompatActivity implements DuoMenuView.OnMenuClickListener {
     private  MenuItemAdapter menuAdapter;
     DuoMenuView mDuoMenuView;
-    private DuoDrawerLayout draw;
-    private ArrayList<String> menuItems = new ArrayList<>();
+    private ArrayList<String> menuItems;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
-        draw = findViewById(R.id.drawer);
-        menuItems.add("Home");
-        menuItems.add("Book a slot");
-        menuItems.add("View slots by driver");
-        menuItems.add("View slots by day");
-        menuItems.add("View everyday's slots");
+        //draw = findViewById(R.id.drawer);
+        menuItems =new ArrayList<>(Arrays.asList(CommonUtil.getMenu()));
         menuAdapter = new MenuItemAdapter(menuItems);
         mDuoMenuView = findViewById(R.id.menu);
         mDuoMenuView.setOnMenuClickListener(this);
@@ -46,7 +44,6 @@ public class MainActivity extends AppCompatActivity implements DuoMenuView.OnMen
             @Override
             public void run() {
                 mDuoMenuView.setAdapter(menuAdapter);
-
             }
         }, 100);
 
@@ -61,31 +58,34 @@ public class MainActivity extends AppCompatActivity implements DuoMenuView.OnMen
 
     @Override
     public void onFooterClicked() {
-        Toast.makeText(this, "onFooterClicked", Toast.LENGTH_SHORT).show();
+        finish();
     }
 
     @Override
     public void onHeaderClicked() {
-        Toast.makeText(this, "onHeaderClicked", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Assignment from Felix", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onOptionClicked(int position, Object objectClicked) {
-        //setTitle(mTitles.get(position));
-
-        // Set the right options selected
         DuoOptionView selectedView = (DuoOptionView)menuAdapter.setViewSelected(position, true);
-        String menuText = menuItems.get(position).toLowerCase();
+        String menuText = menuItems.get(position);
         // Navigate to the right fragment
         switch (menuText) {
-            case "home":
-
+            case CommonUtil.Home:
+                goToFragment(new HomeFragment(), false);
                 break;
-            case "book a slot":
+            case CommonUtil.BOOK_SLOT:
                 goToFragment(new BookSlotFragment(), false);
                 break;
+            case CommonUtil.VIEW_BY_DRIVER:
+                goToFragment(new DriverSlotFragment(), false);
+                break;
+            case CommonUtil.VIEW_BY_DAY:
+                goToFragment(new DaySlotFragment(), false);
+                break;
             default:
-                goToFragment(new HomeFragment(), false);
+                //goToFragment(new HomeFragment(), false);
                 break;
         }
     }

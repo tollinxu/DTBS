@@ -1,6 +1,5 @@
 package com.felix.dtbs.fragments;
 
-import android.app.Activity;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -10,17 +9,31 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
 
-import com.felix.dtbs.MainActivity;
+import com.felix.dtbs.CommonUtil;
 import com.felix.dtbs.R;
+import com.felix.dtbs.models.Slot;
 
+import java.security.KeyStore;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link HomeFragment#newInstance} factory method to
+ * Use the {@link DriverSlotFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class HomeFragment extends Fragment {
+public class DriverSlotFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -29,7 +42,8 @@ public class HomeFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    public HomeFragment() {
+
+    public DriverSlotFragment() {
     }
 
     /**
@@ -38,11 +52,11 @@ public class HomeFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment HomeFragment.
+     * @return A new instance of fragment DriverSlotFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static HomeFragment newInstance(String param1, String param2) {
-        HomeFragment fragment = new HomeFragment();
+    public static DriverSlotFragment newInstance(String param1, String param2) {
+        DriverSlotFragment fragment = new DriverSlotFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -59,25 +73,34 @@ public class HomeFragment extends Fragment {
         }
     }
 
+    private ListView listView;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
-        return view;
+        return inflater.inflate(R.layout.fragment_driver_slot, container, false);
     }
-    private Activity mainActivity;
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mainActivity = getActivity();
-        getView().findViewById(R.id.tvGoto).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MainActivity mActivity = (MainActivity)mainActivity;
-                mActivity.onOptionClicked(1, null);
-            }
-        });
+        listView = getView().findViewById(R.id.lvdriverslot);
+
+        ArrayList<HashMap<String, Object>> listItem = new ArrayList<HashMap<String, Object>>();
+        try {
+            listItem.add(CommonUtil.getSlotItem("Sam", CommonUtil.dateFormat.parse("02/03/2020"), "14:00"));
+            listItem.add(CommonUtil.getSlotItem("Sam",CommonUtil.dateFormat.parse("02/04/2020"), "12:00"));
+            listItem.add(CommonUtil.getSlotItem("Sam", CommonUtil.dateFormat.parse("05/03/2020"), "14:00"));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        SimpleAdapter listItemAdapter = new SimpleAdapter(getActivity(), listItem, R.layout.fragment_driver_slot_item,
+                new String[]{"tvSlotDate", "tvSlotTime"},
+                new int[]{R.id.slotDate, R.id.slotTime});
+        listView.setAdapter(listItemAdapter);
     }
+
+
 }

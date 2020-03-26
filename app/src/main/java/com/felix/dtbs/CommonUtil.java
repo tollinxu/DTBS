@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 public class CommonUtil {
@@ -28,5 +29,25 @@ public class CommonUtil {
             dates.add(sdf.format(date));
         }
         return dates;
+    }
+
+    public static final  String Home = "Home";
+    public static final  String BOOK_SLOT = "Book a slot";
+    public static final  String VIEW_BY_DRIVER = "View slots by driver";
+    public static final  String VIEW_BY_DAY = "View slots by day";
+
+    public static String[] getMenu() {
+        return new String[]{Home, BOOK_SLOT, VIEW_BY_DRIVER, VIEW_BY_DAY};
+    }
+
+    public static SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+    public static HashMap<String, Object> getSlotItem(String driverLicense, Date slotDate, String slotTime) {
+        HashMap<String, Object> slot = new HashMap<>();
+        slot.put("tvDriverLicence", driverLicense);
+        slot.put("tvSlotDate", dateFormat.format(slotDate));
+        slot.put("tvSlotTime", slotTime);
+
+        return slot;
     }
 }

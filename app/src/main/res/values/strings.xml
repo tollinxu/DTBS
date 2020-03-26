@@ -11,4 +11,7 @@
     <string name="driveLicenceHint">*********</string>
     <string name="dateHint">Select Date</string>
     <string name="btnSubmit">Submit</string>
+    <string name="totalSummer">View Total Booking Slots</string>
+    <string name="bookaslot">Book a Slot</string>
+    <string name="autocompletedriverlicence">Please input a driver licence</string>
 </resources>
