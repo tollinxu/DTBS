@@ -36,6 +36,8 @@ public class CommonUtil {
     public static final  String VIEW_BY_DRIVER = "View slots by driver";
     public static final  String VIEW_BY_DAY = "View slots by day";
 
+    public static final  int MAX_SLOT = 10;
+
     public static String[] getMenu() {
         return new String[]{Home, BOOK_SLOT, VIEW_BY_DRIVER, VIEW_BY_DAY};
     }
@@ -49,5 +51,13 @@ public class CommonUtil {
         slot.put("tvSlotTime", slotTime);
 
         return slot;
+    }
+
+    public static boolean isWeekend(Calendar calendar) {
+        if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY || calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+            return true;
+        }
+
+        return false;
     }
 }
