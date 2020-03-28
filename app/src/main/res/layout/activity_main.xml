@@ -1,25 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<nl.psdcompany.duonavigationdrawer.views.DuoDrawerLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<nl.psdcompany.duonavigationdrawer.views.DuoDrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer"
-    app:content="@layout/content"
-    app:menu="@layout/menu"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    app:content="@layout/content"
+    app:menu="@layout/menu">
 
     <nl.psdcompany.duonavigationdrawer.views.DuoMenuView
-            android:id="@+id/menu"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:tag="menu"
-            app:footer="@layout/duo_view_footer"
-            app:header="@layout/duo_view_header" >
-
-
-        </nl.psdcompany.duonavigationdrawer.views.DuoMenuView>
-
+        android:id="@+id/menu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:tag="menu"
+        app:footer="@layout/duo_view_footer"
+        app:header="@layout/duo_view_header">
+    </nl.psdcompany.duonavigationdrawer.views.DuoMenuView>
 
 
 </nl.psdcompany.duonavigationdrawer.views.DuoDrawerLayout>

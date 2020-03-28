@@ -82,9 +82,9 @@ public class DaySlotFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         ArrayList<HashMap<String, Object>> listItem = new ArrayList<HashMap<String, Object>>();
         try {
-            listItem.add(CommonUtil.getSlotItem("Teddy Bear", CommonUtil.dateFormat.parse("02/03/2020"), "14:00"));
-            listItem.add(CommonUtil.getSlotItem("Jodge",CommonUtil.dateFormat.parse("02/04/2020"), "12:00"));
-            listItem.add(CommonUtil.getSlotItem("Peggie", CommonUtil.dateFormat.parse("05/03/2020"), "14:00"));
+            listItem.add(CommonUtil.getSlotItem("Teddy Bear", CommonUtil.SimpleDateFormat.parse("02/03/2020"), "14:00"));
+            listItem.add(CommonUtil.getSlotItem("Jodge",CommonUtil.SimpleDateFormat.parse("02/04/2020"), "12:00"));
+            listItem.add(CommonUtil.getSlotItem("Peggie", CommonUtil.SimpleDateFormat.parse("05/03/2020"), "14:00"));
         } catch (ParseException e) {
             e.printStackTrace();
         }

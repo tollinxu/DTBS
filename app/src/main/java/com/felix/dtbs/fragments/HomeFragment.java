@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import com.felix.dtbs.MainActivity;
 import com.felix.dtbs.R;
+import com.felix.dtbs.service.BookSlotService;
 
 
 /**
@@ -30,6 +31,7 @@ public class HomeFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     public HomeFragment() {
+        //BookSlotService.getInstance().getSlots()
     }
 
     /**

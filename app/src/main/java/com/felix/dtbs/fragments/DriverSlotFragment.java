@@ -9,24 +9,15 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
 import com.felix.dtbs.CommonUtil;
 import com.felix.dtbs.R;
-import com.felix.dtbs.models.Slot;
 
-import java.security.KeyStore;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -89,9 +80,9 @@ public class DriverSlotFragment extends Fragment {
 
         ArrayList<HashMap<String, Object>> listItem = new ArrayList<HashMap<String, Object>>();
         try {
-            listItem.add(CommonUtil.getSlotItem("Sam", CommonUtil.dateFormat.parse("02/03/2020"), "14:00"));
-            listItem.add(CommonUtil.getSlotItem("Sam",CommonUtil.dateFormat.parse("02/04/2020"), "12:00"));
-            listItem.add(CommonUtil.getSlotItem("Sam", CommonUtil.dateFormat.parse("05/03/2020"), "14:00"));
+            listItem.add(CommonUtil.getSlotItem("Sam", CommonUtil.SimpleDateFormat.parse("02/03/2020"), "14:00"));
+            listItem.add(CommonUtil.getSlotItem("Sam",CommonUtil.SimpleDateFormat.parse("02/04/2020"), "12:00"));
+            listItem.add(CommonUtil.getSlotItem("Sam", CommonUtil.SimpleDateFormat.parse("05/03/2020"), "14:00"));
         } catch (ParseException e) {
             e.printStackTrace();
         }

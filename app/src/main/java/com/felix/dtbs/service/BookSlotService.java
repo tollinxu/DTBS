@@ -44,14 +44,14 @@ public class BookSlotService {
 
         // full check
         long currentSlotQuantity = store.stream()
-                .filter((slot) -> day.equals(CommonUtil.dateFormat.format(slot.getSlotDate())) && String.valueOf(hour).equals(slot.getSlotTime()))
+                .filter((slot) -> day.equals(CommonUtil.SimpleDateFormat.format(slot.getSlotDate())) && String.valueOf(hour).equals(slot.getSlotTime()))
                 .count();
         if (currentSlotQuantity >= CommonUtil.MAX_SLOT) {
             return false;
         }
         // today booking check
         long todaySlotsQuantity = store.stream()
-                .filter((slot) -> day.equals(CommonUtil.dateFormat.format(slot.getSlotDate())) && licenceNumber.equals(slot.getDriverLicence()))
+                .filter((slot) -> day.equals(CommonUtil.SimpleDateFormat.format(slot.getSlotDate())) && licenceNumber.equals(slot.getDriverLicence()))
                 .count();
         if (todaySlotsQuantity > 0) {
             return false;
@@ -59,7 +59,7 @@ public class BookSlotService {
 
         Slot slot = null;
         try {
-            Date theDay = CommonUtil.dateFormat.parse(day);
+            Date theDay = CommonUtil.SimpleDateFormat.parse(day);
 
             Date today = new Date();
             // cannot book slot before today
@@ -92,7 +92,7 @@ public class BookSlotService {
     }
 
     public List<Slot> getSlots(String day){
-        return store.stream().filter((slot -> day.equals(CommonUtil.dateFormat.format(slot.getSlotDate())))).collect(Collectors.toList());
+        return store.stream().filter((slot -> day.equals(CommonUtil.SimpleDateFormat.format(slot.getSlotDate())))).collect(Collectors.toList());
     }
 
     /**

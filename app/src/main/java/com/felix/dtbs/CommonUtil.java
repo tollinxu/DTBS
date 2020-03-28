@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -42,12 +43,31 @@ public class CommonUtil {
         return new String[]{Home, BOOK_SLOT, VIEW_BY_DRIVER, VIEW_BY_DAY};
     }
 
-    public static SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    public static SimpleDateFormat SimpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+    public static Date getNextDay(boolean isWorkDay){
+        Calendar calendar = new GregorianCalendar();
+        Date today = new Date();
+        calendar.setTime(today);
+        calendar.add(calendar.DATE, 1);
+        Date tomorrow = calendar.getTime();
+        while (CommonUtil.isWeekend(calendar) == isWorkDay) {
+            calendar.add(calendar.DATE, 1);
+            tomorrow = calendar.getTime();
+        }
+
+        return  tomorrow;
+    }
+
+    public static String getNextDayString(boolean isWorkDay){
+        Date tomorrow = getNextDay(isWorkDay);
+        return CommonUtil.SimpleDateFormat.format(tomorrow);
+    }
 
     public static HashMap<String, Object> getSlotItem(String driverLicense, Date slotDate, String slotTime) {
         HashMap<String, Object> slot = new HashMap<>();
         slot.put("tvDriverLicence", driverLicense);
-        slot.put("tvSlotDate", dateFormat.format(slotDate));
+        slot.put("tvSlotDate", SimpleDateFormat.format(slotDate));
         slot.put("tvSlotTime", slotTime);
 
         return slot;
