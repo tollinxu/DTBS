@@ -19,10 +19,17 @@ import android.widget.TextView;
 import com.felix.dtbs.CommonUtil;
 import com.felix.dtbs.R;
 import com.felix.dtbs.components.DatePickerFragment;
+import com.felix.dtbs.models.Slot;
+import com.felix.dtbs.service.BookSlotService;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -77,24 +84,17 @@ public class DaySlotFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_day_slot, container, false);
     }
     private TextView tvDate;
+    private ListView listView;
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ArrayList<HashMap<String, Object>> listItem = new ArrayList<HashMap<String, Object>>();
-        try {
-            listItem.add(CommonUtil.getSlotItem("Teddy Bear", CommonUtil.SimpleDateFormat.parse("02/03/2020"), "14:00"));
-            listItem.add(CommonUtil.getSlotItem("Jodge",CommonUtil.SimpleDateFormat.parse("02/04/2020"), "12:00"));
-            listItem.add(CommonUtil.getSlotItem("Peggie", CommonUtil.SimpleDateFormat.parse("05/03/2020"), "14:00"));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        ListView listView = getView().findViewById(R.id.lvDaySlots);
-        SimpleAdapter listItemAdapter = new SimpleAdapter(getActivity(), listItem, R.layout.fragment_day_slot_item,
-                new String[]{ "tvDriverLicence","tvSlotDate", "tvSlotTime"},
-                new int[]{R.id.tvDriverLicence, R.id.tvSlotDate, R.id.tvSlotTime});
-        listView.setAdapter(listItemAdapter);
-
+        String day = CommonUtil.getNextDayString(true);
+        listView = getView().findViewById(R.id.lvDaySlots);
         tvDate = getView().findViewById(R.id.tvDate);
+
+        tvDate.setText(day);
+        setListViewAdapter(day);
+
         tvDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -106,12 +106,36 @@ public class DaySlotFragment extends Fragment {
                         int day = datePicker.getDayOfMonth();
                         int year = datePicker.getYear();
                         int month = datePicker.getMonth();
-                        tvDate.setText(String.valueOf(day)+"/" + String.valueOf(month) + "/" + String.valueOf(year));
+                        Calendar calendar = new GregorianCalendar();
+                        calendar.set(year, month, day);
+                        Date selectedDay = calendar.getTime();
+                        String dayString = CommonUtil.SimpleDateFormat.format(selectedDay);
+                        setListViewAdapter(dayString);
+                        tvDate.setText(dayString);
                     }
                 });
                 newFragment.show(getActivity().getSupportFragmentManager(), "datePicker");
 
             }
         });
+    }
+
+    private void setListViewAdapter(String day) {
+        List<Slot> slots = BookSlotService.getInstance().getSlots(day);
+        List<Map<String, Object>> datas = new ArrayList<>();
+        for (int i = 9; i < 17; i++) {
+            datas.add(getMap(i + ":00", slots));
+        }
+        DaySlotFragmentAdpater adpater = new DaySlotFragmentAdpater(getActivity(), R.layout.fragment_day_slot_item, datas);
+        listView.setAdapter(adpater);
+    }
+
+    private Map<String, Object> getMap(String time, List<Slot> slots){
+        Map<String, Object> mapData = new HashMap<>();
+        mapData.put(CommonUtil.DaySlotFragmentConst.TimeKey, time);
+        long count  = slots.stream().filter(slot -> time.equals(slot.getSlotTime())).count();
+        mapData.put(CommonUtil.DaySlotFragmentConst.NumberKey, count);
+        mapData.put(CommonUtil.DaySlotFragmentConst.ColorKey, CommonUtil.getColor((int) count, CommonUtil.MAX_SLOT));
+        return  mapData;
     }
 }

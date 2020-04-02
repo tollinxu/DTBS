@@ -10,10 +10,23 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
 
+import com.felix.dtbs.CommonUtil;
 import com.felix.dtbs.MainActivity;
 import com.felix.dtbs.R;
+import com.felix.dtbs.models.Slot;
 import com.felix.dtbs.service.BookSlotService;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -30,8 +43,35 @@ public class HomeFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private List<Map<String, Object>> overAllData;
+
     public HomeFragment() {
-        //BookSlotService.getInstance().getSlots()
+        Date cursor = new Date();
+        overAllData = new ArrayList<>();
+        Map<String, Object> oneDayData;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEEE");
+        for (int i = 0; i < 5; i++) {
+            oneDayData = new HashMap<>();
+            Calendar calendar = new GregorianCalendar();
+            calendar.setTime(cursor);
+            calendar.add(calendar.DATE, 1);
+            cursor = calendar.getTime();
+            if(CommonUtil.isWeekend(calendar)){
+                cursor = CommonUtil.getNextDay(true, cursor);
+                calendar.setTime(cursor);
+            }
+
+            List<Slot> slots =  BookSlotService.getInstance().getSlots(CommonUtil.SimpleDateFormat.format(cursor));
+            oneDayData.put(CommonUtil.HomeFragmentConst.DateKey, CommonUtil.SimpleDateFormat.format(cursor));
+            int amount = slots.size();
+            oneDayData.put(CommonUtil.HomeFragmentConst.NumberKey, amount);
+
+            oneDayData.put(CommonUtil.HomeFragmentConst.DayOfWeek, simpleDateFormat.format(cursor));
+            oneDayData.put(CommonUtil.HomeFragmentConst.ColorKey, CommonUtil.getColor(amount, CommonUtil.TotalPerDay));
+            overAllData.add(oneDayData);
+
+        }
+
     }
 
     /**
@@ -70,10 +110,14 @@ public class HomeFragment extends Fragment {
         return view;
     }
     private Activity mainActivity;
+    private ListView lvContent;
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mainActivity = getActivity();
+        lvContent = getView().findViewById(R.id.lvContent);
+        HomeFragmentAdapter adapter = new HomeFragmentAdapter(mainActivity, R.layout.fragment_home_item, overAllData);
+        lvContent.setAdapter(adapter);
         getView().findViewById(R.id.tvGoto).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

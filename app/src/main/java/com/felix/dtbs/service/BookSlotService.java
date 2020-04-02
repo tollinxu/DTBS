@@ -1,5 +1,7 @@
 package com.felix.dtbs.service;
 
+import android.util.Log;
+
 import com.felix.dtbs.CommonUtil;
 import com.felix.dtbs.models.Slot;
 
@@ -19,6 +21,34 @@ public class BookSlotService {
     private List<Slot> store = new ArrayList<>();
 
     private BookSlotService() {
+        MockData();
+    }
+
+    private int RandomInt() {
+        double d = Math.random();
+        return (int) (d * CommonUtil.MAX_SLOT);
+    }
+
+    private void MockData() {
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(new Date());
+
+        // the coming 7 days
+        for (int i = 0; i < 7; i++) {
+            calendar.add(calendar.DATE, 1);
+            Date today = calendar.getTime();
+            if (CommonUtil.isWeekend(calendar)) {
+                continue;
+            }
+            String dayString = CommonUtil.SimpleDateFormat.format(today);
+            for (int j = 9; j < 17; j++) {
+                int slotCount = RandomInt();
+                for (int k = 0; k < slotCount; k++) {
+                    store.add(new Slot(dayString + " " + j + ":00" + k, today, j + ":00"));
+                }
+            }
+        }
+
     }
 
     public static BookSlotService getInstance() {
@@ -87,12 +117,16 @@ public class BookSlotService {
         return true;
     }
 
-    public List<Slot> getTimeslotBooking(String licenceNumber){
+    public List<Slot> getTimeslotBooking(String licenceNumber) {
         return store.stream().filter((slot -> licenceNumber.equals(slot.getDriverLicence()))).collect(Collectors.toList());
     }
 
-    public List<Slot> getSlots(String day){
+    public List<Slot> getSlots(String day) {
         return store.stream().filter((slot -> day.equals(CommonUtil.SimpleDateFormat.format(slot.getSlotDate())))).collect(Collectors.toList());
+    }
+
+    public List<String> getDriverLicences() {
+        return store.stream().map(s -> s.getDriverLicence()).collect(Collectors.toList());
     }
 
     /**

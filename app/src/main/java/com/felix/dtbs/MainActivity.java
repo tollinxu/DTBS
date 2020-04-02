@@ -66,8 +66,14 @@ public class MainActivity extends AppCompatActivity implements DuoMenuView.OnMen
 
     @Override
     public void onOptionClicked(int position, Object objectClicked) {
-        DuoOptionView selectedView = (DuoOptionView) menuAdapter.setViewSelected(position, true);
-        String menuText = menuItems.get(position);
+        additionalOptionClicked(position, null, objectClicked, null);
+    }
+
+    public void additionalOptionClicked(int position, String menuText, Object objectClicked, Object state) {
+        menuAdapter.setViewSelected(position, true);
+        if (CommonUtil.isNullOrEmpty(menuText)) {
+            menuText = menuItems.get(position);
+        }
         // Navigate to the right fragment
         switch (menuText) {
             case CommonUtil.Home:
@@ -77,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements DuoMenuView.OnMen
                 goToFragment(new BookSlotFragment(), false);
                 break;
             case CommonUtil.VIEW_BY_DRIVER:
-                goToFragment(new DriverSlotFragment(), false);
+                goToFragment(new DriverSlotFragment(state== null ? null : state.toString()), false);
                 break;
             case CommonUtil.VIEW_BY_DAY:
                 goToFragment(new DaySlotFragment(), false);
