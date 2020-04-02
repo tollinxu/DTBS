@@ -10,11 +10,14 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,6 +26,11 @@ import com.felix.dtbs.CommonUtil;
 import com.felix.dtbs.MainActivity;
 import com.felix.dtbs.R;
 import com.felix.dtbs.components.DatePickerFragment;
+import com.felix.dtbs.service.BookSlotService;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -77,8 +85,10 @@ public class BookSlotFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_book_slot, container, false);
     }
+
     private MainActivity activity;
     private TextView etDate;
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -88,25 +98,69 @@ public class BookSlotFragment extends Fragment {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 // Apply the adapter to the spinner
         slotsSelector.setAdapter(adapter);
-        activity = (MainActivity)getActivity();
-
+        activity = (MainActivity) getActivity();
         etDate = getView().findViewById(R.id.etDate);
+
+        Button btnBookSlot = getView().findViewById(R.id.btnBookSlot);
+        btnBookSlot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CommonUtil.hideKeyboard(activity);
+
+                EditText etDriveLicence = activity.findViewById(R.id.etDriveLicence);
+                TextView tvDate = activity.findViewById(R.id.etDate);
+
+                String driverLicence = etDriveLicence.getText().toString();
+                if (CommonUtil.isNullOrEmpty(driverLicence)) {
+                    Toast.makeText(activity.getApplicationContext(), "Driver licence cannot be empty!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                String dateString = tvDate.getText().toString();
+                if (CommonUtil.isNullOrEmpty(dateString)) {
+                    Toast.makeText(activity.getApplicationContext(), "Please choose a date!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                int position = slotsSelector.getSelectedItemPosition();
+                int hour = Integer.parseInt(CommonUtil.getTimeSlots().get(position).split(":")[0]);
+                if (CommonUtil.isNullOrEmpty(driverLicence)) {
+                    Toast.makeText(activity.getApplicationContext(), "Driver licence cannot be empty!", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                boolean result = BookSlotService.getInstance().bookTimeslot(driverLicence, dateString, hour);
+                if (result) {
+                    Toast.makeText(activity.getApplicationContext(), "Book successful", Toast.LENGTH_LONG).show();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            activity.additionalOptionClicked(0, CommonUtil.VIEW_BY_DRIVER, null, driverLicence);
+                        }
+                    }, 3000);
+
+                } else {
+                    Toast.makeText(activity.getApplicationContext(), "Book faild", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
         etDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DatePickerFragment newFragment = new DatePickerFragment();
+
                 newFragment.setPositiveClickListner(new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        DatePicker datePicker = ((DatePickerDialog)dialog).getDatePicker();
+                        DatePicker datePicker = ((DatePickerDialog) dialog).getDatePicker();
                         int day = datePicker.getDayOfMonth();
                         int year = datePicker.getYear();
                         int month = datePicker.getMonth();
-                        etDate.setText(String.valueOf(day)+"/" + String.valueOf(month) + "/" + String.valueOf(year));
+                        Calendar calendar = new GregorianCalendar();
+                        calendar.set(year, month, day);
+                        Date selectedDay = calendar.getTime();
+                        etDate.setText(CommonUtil.SimpleDateFormat.format(selectedDay));
                     }
                 });
                 newFragment.show(activity.getSupportFragmentManager(), "datePicker");
-
             }
         });
     }

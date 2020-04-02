@@ -11,8 +11,20 @@ import androidx.fragment.app.DialogFragment;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+
+    public DatePickerFragment(){
+        Date today = new Date();
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(today);
+        calendar.add(calendar.DATE, 1);
+        setMinDate(calendar.getTime());
+        calendar.add(calendar.DATE, 6);
+        setMaxDate(calendar.getTime());
+    }
+
     public Date getMinDate() {
         return minDate;
     }
@@ -61,8 +73,14 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
 
         // Create a new instance of DatePickerDialog and return it
         DatePickerDialog dialog =  new DatePickerDialog(getActivity(), this, year, month, day);
-        dialog.getDatePicker().setMinDate(System.currentTimeMillis());
-        dialog.getDatePicker().setMaxDate(System.currentTimeMillis() + 7 * 24 * 60 * 60 * 1000);
+        if(this.getMinDate() != null){
+            dialog.getDatePicker().setMinDate(this.getMinDate().getTime());
+        }
+
+        if(this.getMaxDate() != null){
+            dialog.getDatePicker().setMaxDate(this.getMaxDate().getTime());
+        }
+
         if(getPositiveClickListner() != null){
             dialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", getPositiveClickListner());
         }
