@@ -34,7 +34,9 @@
 
 &emsp;&emsp; User can input a driver licence, select a Date within a datepicker, and choose a time in dropdown list.
 
-&emsp;&emsp; After cliking the submit button, it will book a slot in db. If failed, it will pop-up a message to notify &&&emsp;&emsp; failed through toast.
+&emsp;&emsp; After cliking the submit button, it will book a slot in db. If failed, it will pop-up a message to notify &&
+
+&emsp;&emsp; failed through toast.
 
 &emsp;&emsp; If succeed, it will pop-up a message of success. And after a few seconds it will go into next page, View slots by driver
 
