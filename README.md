@@ -5,17 +5,23 @@
 ## &emsp;&emsp; 1517253
 
 
-# **The following content is the specification of the DTBS app
+# **The following content is the specification of the DTBS app**
 
 
 + ## **Over All** 
 &emsp;&emsp; This app is designed for Drivers Licence Test Booking System.
+
 &emsp;&emsp; Because of no persisted data, the author mocks some random data to show the plot when it start. 
+
+&emsp;&emsp; Demostration video is [here](https://youtu.be/Vcnzi1bMI20)
 
 + ## **Home**
 &emsp;&emsp; Home Page is used to display the overall summary in the coming five workdays' booking info.
+
 &emsp;&emsp; If the booking percent is greater than 75, then the chart is red.
+
 &emsp;&emsp; If the booking percent is greater than 50, then the chart is yellow.
+
 &emsp;&emsp; Other wise it is green.
 
 &emsp;&emsp; Click the button of "Book a Slot" can go into the Book a slot page.
