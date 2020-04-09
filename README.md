@@ -2,9 +2,6 @@
 
 ## &emsp;&emsp; from Feng Xu  
 
-## &emsp;&emsp; 1517253
-
-
 # **The following content is the specification of the DTBS app**
 
 
